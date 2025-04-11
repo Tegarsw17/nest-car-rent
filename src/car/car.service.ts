@@ -42,4 +42,8 @@ export class CarService {
         };
     }
 
+    async getCarById(id: number): Promise<Car> {
+        return this.carRepo.findOne({ where: { id } });
+    }
+
 }

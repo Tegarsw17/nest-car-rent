@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, NotFoundException, Param, Query } from '@nestjs/common';
 import { CarService } from './car.service';
 
 @Controller('car')
@@ -23,5 +23,12 @@ export class CarController {
             page: parseInt(page),
             pageSize: parseInt(pageSize),
         });
+    }
+
+    @Get('/:id')
+    async getCarById(@Param('id') id: number) {
+        const car = await this.carService.getCarById(id);
+        if (!car) throw new NotFoundException('Car not found');
+        return car;
     }
 }
