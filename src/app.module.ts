@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserModule } from './user/user.module';
 import { CarModule } from './car/car.module';
 import { AdminCarModule } from './admin-car/admin-car.module';
+import { OrderModule } from './order/order.module';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -20,7 +21,8 @@ dotenv.config();
     UserModule,
     AuthModule,
     CarModule,
-    AdminCarModule],
+    AdminCarModule,
+    OrderModule],
   controllers: [AppController],
   providers: [AppService],
 })
