@@ -31,7 +31,7 @@ export class OrderService {
 
         const start = new Date(start_rent_at);
         const end = new Date(finish_rent_at);
-        const dayDiff = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24);
+        const dayDiff = (end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24) + 1;
 
         if (dayDiff > 7) {
             throw new BadRequestException({ error: 'Rent duration cannot exceed 7 days' });
