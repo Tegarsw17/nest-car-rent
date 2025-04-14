@@ -7,6 +7,8 @@ import { UserModule } from './user/user.module';
 import { CarModule } from './car/car.module';
 import { AdminCarModule } from './admin-car/admin-car.module';
 import { OrderModule } from './order/order.module';
+import { AdminAuthModule } from './admin/admin-auth/admin-auth.module';
+import { AdminOrderModule } from './admin-order/admin-order.module';
 import * as dotenv from 'dotenv';
 dotenv.config();
 
@@ -22,7 +24,9 @@ dotenv.config();
     AuthModule,
     CarModule,
     AdminCarModule,
-    OrderModule],
+    OrderModule,
+    AdminAuthModule,
+    AdminOrderModule],
   controllers: [AppController],
   providers: [AppService],
 })
