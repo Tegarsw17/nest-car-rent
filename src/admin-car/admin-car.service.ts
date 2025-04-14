@@ -1,5 +1,5 @@
 // src/admin-car/admin-car.service.ts
-import { Injectable, BadRequestException, InternalServerErrorException } from '@nestjs/common';
+import { Injectable, BadRequestException, InternalServerErrorException, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Car } from '../car/car.entity';
 import { Repository } from 'typeorm';
@@ -66,5 +66,48 @@ export class AdminCarService {
             console.error('Upload Error:', error);
             throw new InternalServerErrorException({ error: 'Could not add car' });
         }
+    }
+
+    async updateCar(id: number, body: any, file?: Express.Multer.File) {
+        const car = await this.carRepo.findOne({ where: { id } });
+        if (!car) throw new NotFoundException('Car not found');
+
+        const { name, category, price } = body;
+
+        if (file) {
+            const imageUrl = await this.uploadToCloudinary(file);
+            car.imageUrl = imageUrl.secure_url;
+        }
+
+        car.name = name || car.name;
+        car.category = category || car.category;
+        car.price = price ? Number(price) : car.price;
+
+        await this.carRepo.save(car);
+
+        return {
+            statusText: 'Car updated successfully',
+            data: {
+                id: car.id,
+                name: car.name,
+                category: car.category,
+                price: car.price,
+                imageUrl: car.imageUrl,
+            },
+        };
+    }
+
+    async deleteCar(id: number) {
+        const car = await this.carRepo.findOne({ where: { id } });
+        if (!car) {
+            throw new NotFoundException('Car not found');
+        }
+
+        await this.carRepo.remove(car);
+
+        return {
+            statusText: 'Car deleted successfully',
+            deletedCarId: id,
+        };
     }
 }

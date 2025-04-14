@@ -1,5 +1,5 @@
 // src/admin-car/admin-car.controller.ts
-import { Controller, Post, UseGuards, UseInterceptors, UploadedFile, Body } from '@nestjs/common';
+import { Controller, Post, UseGuards, UseInterceptors, UploadedFile, Body, Put, Param, Delete } from '@nestjs/common';
 import { AdminCarService } from './admin-car.service';
 import { FileInterceptor } from '@nestjs/platform-express';
 // Import your JWT auth guard (assumes it's already implemented in your project)
@@ -19,5 +19,21 @@ export class AdminCarController {
         console.log('File:', file);
         console.log('Body:', body);
         return this.adminCarService.addCar(file, body);
+    }
+
+    @Put(':id')
+    @UseInterceptors(FileInterceptor('image'))
+    async updateCar(
+        @Param('id') id: number,
+        @UploadedFile() file: Express.Multer.File,
+        @Body() body: any,
+    ) {
+        return this.adminCarService.updateCar(id, body, file);
+    }
+
+    @Delete(':id')
+    @UseGuards(JwtAuthGuard)
+    async deleteCar(@Param('id') id: number) {
+        return this.adminCarService.deleteCar(id);
     }
 }
